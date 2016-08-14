@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SmartClone.UnitTest.TestData
 {
@@ -9,57 +8,43 @@ namespace SmartClone.UnitTest.TestData
     /// </summary>
     public class ItemSetDataManager
     {
-        private static readonly Random Random = new Random();
+        private static readonly Random _random = new Random();
 
-        private static readonly Lazy<ItemSet> RandomItemSet =
-            new Lazy<ItemSet>(RandomItemSetGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
+        static ItemSetDataManager()
+        {
+            GetRandomItemSet = RandomItemSetGeneration();
+            GetNullHeaderItemSet = NullHeaderItemSetGeneration();
+            GetPublicGroupsItemSet = PublicGroupItemSetGeneration();
+            GetPrivateGroupsItemSet = PrivateGroupsItemSetGeneration();
+            GetMaximizedHeaderItemSet = MaximizedHeaderItemSetGeneration();
+            GetHeaderMaximizedItemItemSet = HeaderMaximizedItemGeneration();
+        }
 
-        private static readonly Lazy<ItemSet> NullHeadersItemSet =
-            new Lazy<ItemSet>(NullHeaderItemSetGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private static readonly Lazy<ItemSet> PublicGroupsItemSet =
-            new Lazy<ItemSet>(PublicGroupItemSetGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private static readonly Lazy<ItemSet> PrivateGroupsItemSet =
-            new Lazy<ItemSet>(PrivateGroupsItemSetGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private static readonly Lazy<ItemSet> MaximizedHeaderItemSet =
-            new Lazy<ItemSet>(MaximizedHeaderItemSetGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private static readonly Lazy<ItemSet> HeaderMaximizedItemItemSet =
-            new Lazy<ItemSet>(HeaderMaximizedItemGeneration,
-                LazyThreadSafetyMode.ExecutionAndPublication);
-
-        public static ItemSet GetRandomItemSet => RandomItemSet.Value;
-        public static ItemSet GetNullHeaderItemSet => NullHeadersItemSet.Value;
-        public static ItemSet GetPublicGroupsItemSet => PublicGroupsItemSet.Value;
-        public static ItemSet GetPrivateGroupsItemSet => PrivateGroupsItemSet.Value;
-        public static ItemSet GetMaximizedHeaderItemSet => MaximizedHeaderItemSet.Value;
-        public static ItemSet GetHeaderMaximizedItemItemSet => HeaderMaximizedItemItemSet.Value;
+        public static ItemSet GetRandomItemSet { get; private set; }
+        public static ItemSet GetNullHeaderItemSet { get; private set; }
+        public static ItemSet GetPublicGroupsItemSet { get; private set; }
+        public static ItemSet GetPrivateGroupsItemSet { get; private set; }
+        public static ItemSet GetMaximizedHeaderItemSet { get; private set; }
+        public static ItemSet GetHeaderMaximizedItemItemSet { get; private set; }
 
         private static ItemSet RandomItemSetGeneration()
         {
             var randowItemSet = new ItemSet();
             randowItemSet.Header = new Item {Hidden = false, Maximized = false};
             randowItemSet.Groups = new List<ItemGroup>();
-            var groupsCount = Random.Next(100);
+            var groupsCount = _random.Next(100);
 
             for (var groupsIterator = 0; groupsIterator < groupsCount; groupsIterator++)
             {
                 var itemGroup = new ItemGroup();
-                var itemsCoutn = Random.Next(100);
+                var itemsCoutn = _random.Next(100);
                 for (var itemsIterator = 0; itemsIterator < itemsCoutn; itemsIterator++)
                 {
-                    itemGroup.Hidden = Convert.ToBoolean(Random.Next()%2);
+                    itemGroup.Hidden = Convert.ToBoolean(_random.Next()%2);
                     itemGroup.Items.Add(new Item
                     {
-                        Hidden = Convert.ToBoolean(Random.Next(10)%2),
-                        Maximized = Convert.ToBoolean(Random.Next(10)%2)
+                        Hidden = Convert.ToBoolean(_random.Next(10)%2),
+                        Maximized = Convert.ToBoolean(_random.Next(10)%2)
                     });
                 }
                 randowItemSet.Groups.Add(itemGroup);
@@ -72,19 +57,19 @@ namespace SmartClone.UnitTest.TestData
             var randowItemSet = new ItemSet();
             randowItemSet.Header = null;
             randowItemSet.Groups = new List<ItemGroup>();
-            var groupsCount = Random.Next(100);
+            var groupsCount = _random.Next(100);
 
             for (var groupsIterator = 0; groupsIterator < groupsCount; groupsIterator++)
             {
                 var itemGroup = new ItemGroup();
-                var itemsCoutn = Random.Next(100);
+                var itemsCoutn = _random.Next(100);
                 for (var itemsIterator = 0; itemsIterator < itemsCoutn; itemsIterator++)
                 {
-                    itemGroup.Hidden = Convert.ToBoolean(Random.Next()%2);
+                    itemGroup.Hidden = Convert.ToBoolean(_random.Next()%2);
                     itemGroup.Items.Add(new Item
                     {
-                        Hidden = Convert.ToBoolean(Random.Next(10)%2),
-                        Maximized = Convert.ToBoolean(Random.Next(10)%2)
+                        Hidden = Convert.ToBoolean(_random.Next(10)%2),
+                        Maximized = Convert.ToBoolean(_random.Next(10)%2)
                     });
                 }
                 randowItemSet.Groups.Add(itemGroup);
@@ -123,19 +108,19 @@ namespace SmartClone.UnitTest.TestData
             var randowItemSet = new ItemSet();
             randowItemSet.Header = new Item {Hidden = false, Maximized = false};
             randowItemSet.Groups = new List<ItemGroup>();
-            var groupsCount = Random.Next(100);
+            var groupsCount = _random.Next(100);
 
             for (var groupsIterator = 0; groupsIterator < groupsCount; groupsIterator++)
             {
                 var itemGroup = new ItemGroup();
-                var itemsCoutn = Random.Next(100);
+                var itemsCoutn = _random.Next(100);
                 for (var itemsIterator = 0; itemsIterator < itemsCoutn; itemsIterator++)
                 {
                     itemGroup.Hidden = true;
                     itemGroup.Items.Add(new Item
                     {
-                        Hidden = Convert.ToBoolean(Random.Next(10)%2),
-                        Maximized = Convert.ToBoolean(Random.Next(10)%2)
+                        Hidden = Convert.ToBoolean(_random.Next(10)%2),
+                        Maximized = Convert.ToBoolean(_random.Next(10)%2)
                     });
                 }
                 randowItemSet.Groups.Add(itemGroup);
@@ -159,8 +144,8 @@ namespace SmartClone.UnitTest.TestData
                     itemGroup.Hidden = true;
                     itemGroup.Items.Add(new Item
                     {
-                        Hidden = Convert.ToBoolean(Random.Next(10)%2),
-                        Maximized = Convert.ToBoolean(Random.Next(10)%2)
+                        Hidden = Convert.ToBoolean(_random.Next(10)%2),
+                        Maximized = Convert.ToBoolean(_random.Next(10)%2)
                     });
                 }
                 randowItemSet.Groups.Add(itemGroup);
